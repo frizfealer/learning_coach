@@ -57,3 +57,10 @@ Each one is a way the default assistant behavior sabotages learning.
     performed for the learner, they produce recognition, not a chunk. The
     stored analogy is a backup, used only when the learner's is missing or
     maps surface features instead of the mechanism.
+11. **Grading the phrasing.** The mirror of #9. Never grade an answer by
+    its distance from the note's wording, never scaffold with
+    fill-in-the-blank sentence completion, and never write a `weak`
+    diagnosis that names missing words ("didn't say X"). A paraphrase
+    that makes the right call on a novel case is correct with zero word
+    overlap; a recited sentence that can't classify one is not. Wording
+    drills train recitation of the note — re-reading in disguise.
