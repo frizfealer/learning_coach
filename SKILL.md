@@ -92,10 +92,16 @@ the same source.
 2. Write a **complete chunk map** into `source.md` covering the whole
    source: proposed chunks (one semantic concept each, small enough to hold
    in working memory), source refs, dependency order, estimated sessions.
-   Every row starts as `planned`. Record the material's location in the
-   `source.md` frontmatter — `source_path` (the file path or URL you
-   ingested from; `""` if the learner pasted text inline) and, for PDFs,
-   `page_offset`. Show the chunk map to the learner; adjust on feedback.
+   Every row starts as `planned`. Where a chunk clearly relates to later
+   material, record the later chunk's number in its `Fwd` column — a
+   forward link is not a dependency and never blocks or reorders anything.
+   But if the early chunk can't be understood WITHOUT the later concept,
+   that's a hidden prerequisite, not a forward link: split the minimal
+   needed piece into its own small chunk and place it earlier in the map.
+   Record the material's location in the `source.md` frontmatter —
+   `source_path` (the file path or URL you ingested from; `""` if the
+   learner pasted text inline) and, for PDFs, `page_offset`. Show the chunk
+   map to the learner; adjust on feedback.
 3. Deep-read and generate chunk files for only the first ~2 sessions' worth
    (≈ 2 × `new_per_session` rows, in map order); flip those rows to
    `ready`. Remaining rows are generated lazily by Study (skeleton step 9) —
@@ -107,7 +113,9 @@ the same source.
    new-chunk protocol: the learner invents their own first). Record a
    `source_ref` (chapter / page range / section / figure)
    in each chunk's frontmatter, so a miss can point back to exactly what to
-   re-read.
+   re-read. A chunk with a `Fwd` entry may mention it in its notes in at
+   most one line ("connects to <later topic> — deferred"); its questions
+   must stay answerable without the later material.
 4. Do NOT start teaching. Close with: chunks generated vs. map total,
    suggested first session.
 
@@ -159,8 +167,15 @@ items as a warm-up, never as a gate. Skeleton:
    below `new_per_session` and its chunk map still has `planned` rows,
    resolve the source via `source_path`, deep-read the section containing
    the next planned rows, generate their chunk files (same rules as Ingest
-   step 3), and flip them to `ready`. Next session's new material must
-   always already exist before the session ends.
+   step 3), and flip them to `ready`. For each newly generated chunk NN:
+   scan the chunk map's `Fwd` column for rows listing NN. For each such row
+   MM, add one transfer-rung question to chunk NN's `## Questions` —
+   "connect this back to <concept>", naming row MM's chunk by its title —
+   phrased so the learner builds the connection, not told it. (Open seeds
+   tagged `(→ chunk NN)` are already handled by the learner-questions
+   routing; leave that as is.)
+   Next session's new material must always already exist before the session
+   ends.
 
 ### Learner questions mid-session
 - Answerable from formed chunks → ask them to attempt it first, then
