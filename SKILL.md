@@ -3,8 +3,7 @@ name: learning-coach
 description: >-
   LHTL study coach: chunks a textbook/paper/article into a question-first
   vault, then runs retrieval-practice sessions with Leitner spaced
-  repetition, interleaving, and Feynman explain-back. Modes: ingest | study |
-  review | status.
+  repetition, interleaving, and Feynman explain-back.
 disable-model-invocation: true
 argument-hint: "[ingest <source> | study | review | status]"
 ---
@@ -42,13 +41,9 @@ Chunk frontmatter carries review state (`box`, `next_review`, `weak`); the
 body is `## Questions` (checkboxes) → `## Notes` → `## Analogy`. A checked
 box means "answered correctly from memory at least once".
 
-**Naming chunks to the learner.** The `NN` prefix is an internal filing/order
-label, not something the learner tracks. Whenever you refer to a chunk in
-conversation, lead with its `title` — e.g. "**Tactical vs strategic**" — not
-a bare "chunk 05". Number-only references are opaque; use the number only as
-a secondary tag alongside the title ("Tactical vs strategic (05)") when
-disambiguation genuinely helps. This applies to every mode: quizzing,
-session recaps, status summaries, and seeds.
+**Naming chunks to the learner.** Refer to chunks by `title`, not number —
+"**Tactical vs strategic**", not "chunk 05"; add the number ("Tactical vs
+strategic (05)") only when disambiguation genuinely helps.
 
 `vault.json` shape:
 
@@ -83,6 +78,9 @@ teaching. After that single ingest, Study keeps the chunk pipeline filled
 on its own (skeleton step 9); never ask the learner to re-invoke ingest for
 the same source.
 
+Before any Study or Review session, read `references/scheduling.md` —
+session composition, grading anchors, state transitions.
+
 ## Ingest (runs once per source)
 
 1. **Picture walk first** (2-minute rule): read only the table of contents,
@@ -103,38 +101,16 @@ the same source.
    learner pasted text inline) and, for PDFs, `page_offset`. Show the chunk
    map to the learner; adjust on feedback.
 3. Deep-read and generate chunk files for only the first ~2 sessions' worth
-   (≈ 2 × `new_per_session` rows, in map order); flip those rows to
-   `ready`. Remaining rows are generated lazily by Study (skeleton step 9) —
-   the learner never invokes ingest again for this source. Order inside
-   each file matters: **questions first** (read `references/questions.md`
-   for the recall→apply→transfer ladder), then notes (≤8 compressed
-   numbered points), then one analogy anchored in the learner's strong
-   domains — written as a backup only, never delivered during teaching (see
-   new-chunk protocol: the learner invents their own first). Record a
-   `source_ref` (chapter / page range / section / figure)
-   in each chunk's frontmatter, so a miss can point back to exactly what to
-   re-read. A chunk with a `Fwd` entry may mention it in its notes in at
-   most one line ("connects to <later topic> — deferred"); its questions
-   must stay answerable without the later material.
+   (≈ 2 × `new_per_session` rows, in map order) per
+   `references/chunk-writing.md`, and flip those rows to `ready`. Remaining
+   rows are generated lazily by Study's refill (skeleton step 9) — one full
+   pass over a large source degrades late chunks, and early sessions still
+   reshape the map.
 4. Do NOT start teaching. Close with: chunks generated vs. map total,
    suggested first session.
 
-Why lazy generation instead of chunking everything now: a single pass over
-a large source degrades chunk quality toward the end, and map adjustments
-learned from early sessions can still shape files not yet written.
-
-**Resolving the source for later chunk generation.** Whenever more chunk
-files are generated after the initial ingest — normally by Study's refill
-step, or if the learner explicitly re-invokes ingest — read `source_path`
-from `source.md` and deep-read from there; the learner never re-specifies
-the file. The chunk map's Status column is the record of progress: `ready`
-rows have files, and the frontier is the first `planned` row. If
-`source_path` is missing or stale (inline-pasted text, moved file), ask the
-learner for the material and write the new path in.
-
 ## Study session
 
-Read `references/scheduling.md` for composition and state-update rules.
 **An explicit request beats the queue**: if the learner asks for something
 specific ("help me with exercise 12", "explain §3.2"), do that — offer due
 items as a warm-up, never as a gate. Skeleton:
@@ -155,27 +131,21 @@ items as a warm-up, never as a gate. Skeleton:
    working-memory limits, then comply.
 6. **Interleave**: when ≥2 chunks are in play, round-robin questions across
    chunks and sources — never drain one chunk fully before touching the next.
-7. **Pace**: after ~25 min of focused work, propose a 5-minute diffuse break.
+7. **Pace**: clock time is invisible in chat — after ~6-8 retrieval
+   exchanges (≈25 min), propose a 5-minute diffuse break. End the session
+   cleanly at one of these breaks rather than grinding on.
 8. **Close**: update checkboxes and frontmatter, append to
    `vault.json.sessions`, and **plant a seed** — write one unresolved or
    frontier question to `seeds.md` and say it aloud: "sleep on this one."
+   Frame the recap as sessions done, not pages covered.
    If the learner unprompted used another chunk's concept while answering,
    append a dated line to the **invoked** chunk's `## Transfer log` —
    without touching that chunk's box, `next_review`, or `last_reviewed`.
    Unprompted transfer is the strongest mastery evidence there is.
 9. **Refill the pipeline**: after closing, if the source's box-0 pool is
    below `new_per_session` and its chunk map still has `planned` rows,
-   resolve the source via `source_path`, deep-read the section containing
-   the next planned rows, generate their chunk files (same rules as Ingest
-   step 3), and flip them to `ready`. For each newly generated chunk NN:
-   scan the chunk map's `Fwd` column for rows listing NN. For each such row
-   MM, add one transfer-rung question to chunk NN's `## Questions` —
-   "connect this back to <concept>", naming row MM's chunk by its title —
-   phrased so the learner builds the connection, not told it. (Open seeds
-   tagged `(→ chunk NN)` are already handled by the learner-questions
-   routing; leave that as is.)
-   Next session's new material must always already exist before the session
-   ends.
+   generate the next planned rows per `references/chunk-writing.md`.
+   A session is closed only once next session's new material already exists.
 
 ### Learner questions mid-session
 - Answerable from formed chunks → ask them to attempt it first, then
@@ -223,7 +193,8 @@ Sequence: probe the boundary → teach from it → re-derive → learner analogy
    size; if the note is long, split delivery across two attempts.
 3. Immediately ask the learner to answer or re-derive **without looking**.
 4. **Learner analogy**: ask them to coin their own analogy from one of
-   their strong domains. Accept it if it maps the mechanism, not surface
+   their strong domains, pushing for concrete imagery — invite them to
+   exaggerate the image. Accept it if it maps the mechanism, not surface
    features. Only if it's missing or structurally broken, offer the
    coach's backup from ingest. Write the surviving version into
    `## Analogy` — the learner's wins on any tie. A weak learner analogy is
@@ -244,9 +215,5 @@ ask an Einstellung-breaker: "solve it a different way" or "connect this to
 
 ## State updates after any session
 
-Exact rules in `references/scheduling.md`. Summary: all questions of a chunk
-correct → box +1 (cap 4; 3→4 requires two consecutive clean reviews), set
-`next_review` by interval table; any miss → box = 1, streak = 0,
-`next_review` tomorrow, missed questions appended to `weak` as
-`"Qn: <one-line diagnosis>"`. Always update files in the same turn you
-finish a chunk — never batch state updates to "later".
+Exact rules in `references/scheduling.md`. Always update files in the same
+turn you finish a chunk — never batch state updates to "later".

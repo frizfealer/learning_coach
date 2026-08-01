@@ -17,7 +17,8 @@ status: <ingesting|active|done>
      refill step generates files in row order from there.
      Fwd: later chunk numbers this chunk relates to (noticed at ingest or
      by the learner). Not a dependency — never blocks this chunk. Resolved
-     when the listed chunk is generated (see Study refill step). -->
+     when the listed chunk is generated
+     (see `references/chunk-writing.md`). -->
 | # | Chunk | Source ref | Depends on | Fwd | Status |
 |---|---|---|---|---|---|
 | 01 | <concept> | <pp. X-Y> | — | — | planned |

@@ -23,18 +23,13 @@ created: <YYYY-MM-DD>
 2. <…, max 8 points; if more are needed the chunk is too big — split it>
 
 ## Analogy
-<coach's backup, written at ingest. At first study the learner invents
-their own; the coach's version is shown only if the learner's is missing
-or doesn't map the mechanism. The learner's version replaces this one.>
+<coach's backup from ingest; the learner's own version replaces it
+(delivery: new-chunk protocol step 4).>
 
 ## Misconception log
-<!-- optional; appended by the coach. Resolved weak entries move here with
-the retest result — never deleted, because a past misconception predicts
-future errors. -->
+<!-- resolved `weak` entries go here (rules: scheduling.md Transitions) -->
 <!-- - YYYY-MM-DD: "Qn: <diagnosis>" — repaired, retest correct -->
 
 ## Transfer log
-<!-- optional; only when it actually happens. Appended by the coach when
-the learner unprompted used THIS chunk while answering another chunk.
-Never update box/next_review/last_reviewed from here. -->
+<!-- unprompted uses of this chunk (rules: SKILL.md Study close step) -->
 <!-- - YYYY-MM-DD: invoked while answering <chunk>/<Qn> — correct -->

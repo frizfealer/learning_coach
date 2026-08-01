@@ -36,9 +36,9 @@ recognizing the answer is still a miss.
 - **miss** — no meaningful recall, or a central misconception
 
 **Grade meaning, never wording.** The note's sentence is an answer key
-for the concept, not a target string. Substitution test: used as a rule,
-would the learner's wording make the same call as the note's on a novel
-case? Same call → correct, even with zero shared words ("can't be
+for the concept, not a target string. **Substitution test**: used as a
+rule, would the learner's wording make the same call as the note's on a
+novel case? Same call → correct, even with zero shared words ("can't be
 modified without reading other code" ≡ "in isolation"). Different call →
 the case they'd get wrong is the gap; name that case, not the missing
 words.
@@ -66,14 +66,12 @@ Chunk-level outcome = worst question grade in that review.
 - Any miss → `box: 1`, `streak: 0`, `next_review: today+1`, append
   to `weak` as `"Qn: <one-line diagnosis>"` — what specifically broke
   ("confuses X with Y", "forgets the base case"), not just the id. Next
-  session's scaffolding question is built from this line. Because the
-  scaffold inherits the diagnosis's shape, the diagnosis must name a
-  broken distinction or misclassified case ("conflates absent info with
-  hard-to-read info") — never missing wording ("didn't say obvious"). A
-  concept diagnosis compiles into a classification probe; a phrase
-  diagnosis compiles into a fill-in-the-blank. Keep it under ~8 words
-  and comma-free. Boxes fall hard on a true miss on purpose — relearning
-  is cheaper than false confidence.
+  session's scaffolding question is built from this line, so the
+  diagnosis must name a broken distinction or misclassified case
+  ("conflates absent info with hard-to-read info") — never missing
+  wording ("didn't say obvious" fails the substitution test). Keep it
+  under ~8 words and comma-free. Boxes fall hard on a true miss on
+  purpose — relearning is cheaper than false confidence.
 - Always set `last_reviewed: today`.
 
 ## Session composition

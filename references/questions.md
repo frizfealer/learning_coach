@@ -24,14 +24,13 @@ easiest recall first, transfer last.
    overfitting by randomly zeroing units?" is self-answering — cut the
    clause).
 3. Prefer "why/how" over "what is" for recall where the source supports it —
-   mechanism recall builds understanding, the glue of chunks.
-   Recall-rung questions test the distinction, not the sentence. Never ask
+   mechanism recall builds understanding, the glue of chunks. Never ask
    "define X in one sentence" — that makes the note's wording the answer
    key. Ask instead for a minimal pair ("which of these two snippets is
    dependency, which is obscurity, and what test did you apply?") or the
    test itself ("what would you check in a piece of code to decide whether
-   X is present?"). Any wording that runs the test correctly is a full
-   answer.
+   X is present?"). Any wording that passes the substitution test is a
+   full answer.
 4. Apply questions should be small enough to attempt in chat, big enough that
    pattern-matching the note text does not solve them.
 5. Transfer questions may reference the learner's strong domains from
