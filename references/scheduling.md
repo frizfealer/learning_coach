@@ -88,6 +88,20 @@ Chunk-level outcome = worst question grade in that review.
 5. A chunk is "handled" this session when its due questions were each asked
    once (plus re-asks of misses). Do not run a chunk to exhaustion.
 
+## Pipeline refill
+
+Generating a chunk file flips its map row `planned` → `ready`
+(mechanics in `references/chunk-writing.md`). Two boundaries keep each
+source's box-0 pool stocked:
+
+- **Close (primary)** — Study step 9: box-0 pool below
+  `new_per_session` with `planned` rows left → generate until the pool
+  reaches `new_per_session`. A session is closed only once next
+  session's new material exists.
+- **Session start (guard)** — due.py reporting fewer box-0 chunks than
+  `new_per_session` while `planned` rows remain means a Close refill
+  was missed: refill before proceeding. Rare by design.
+
 ## due.py
 
 ```

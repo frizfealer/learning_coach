@@ -79,7 +79,7 @@ on its own (skeleton step 9); never ask the learner to re-invoke ingest for
 the same source.
 
 Before any Study or Review session, read `references/scheduling.md` —
-session composition, grading anchors, state transitions.
+session composition, grading anchors, state transitions, pipeline refill.
 
 ## Ingest (runs once per source)
 
@@ -116,7 +116,10 @@ specific ("help me with exercise 12", "explain §3.2"), do that — offer due
 items as a warm-up, never as a gate. Skeleton:
 
 1. Run `python scripts/due.py <vault-path>` → due and new chunks,
-   hardest-first.
+   hardest-first. If it reports fewer box-0 chunks than `new_per_session`
+   while a source's map still has `planned` rows, run the step-9 refill
+   for that source before proceeding — rare; the Close refill normally
+   prevents it.
 2. **First session on a new source only — learner picture walk** (~2 min):
    before any teaching, point the learner at the TOC/headings and ask them
    to state the big pieces and what depends on what. Diff their sketch
@@ -144,7 +147,8 @@ items as a warm-up, never as a gate. Skeleton:
    Unprompted transfer is the strongest mastery evidence there is.
 9. **Refill the pipeline**: after closing, if the source's box-0 pool is
    below `new_per_session` and its chunk map still has `planned` rows,
-   generate the next planned rows per `references/chunk-writing.md`.
+   generate planned rows per `references/chunk-writing.md` until the pool
+   reaches `new_per_session` — one session's worth, never the whole map.
    A session is closed only once next session's new material already exists.
 
 ### Learner questions mid-session
